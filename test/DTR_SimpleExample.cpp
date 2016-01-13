@@ -4,6 +4,7 @@
 #include "interface/DynamicTTreeReader.h"
 
 #define DYNAMIC_TREE_NAME DynamicTTreeReader
+
 #define DATA_TABLE                              \
     DATA(int, i)                                \
     DATA(float, f)
@@ -13,7 +14,14 @@
     DATA(std::string, s)
 
 #include "src/DynamicTTreeReader.cc"
-    
+
+#ifdef __ROOTCLING__
+#pragma link C++ class DynamicTTreeReader+;
+#endif
+
+#ifndef __MAIN__
+#define __MAIN__
+
 int main(int argc, char* argv[])
 {
     TFile* fi = TFile::Open("test.root", "RECREATE");
@@ -46,3 +54,5 @@ int main(int argc, char* argv[])
     
     return 0;
 }
+
+#endif
