@@ -37,4 +37,3 @@ DATA_CLASS_TABLE
 private:
     TTree* tree_;
 };
-

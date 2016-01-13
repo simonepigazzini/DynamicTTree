@@ -4,6 +4,7 @@
 #include "interface/DynamicTTreeReader.h"
 
 #define DYNAMIC_TREE_NAME DynamicTTreeReader
+
 #define DATA_TABLE                              \
     DATA(int, i)                                \
     DATA(float, f)
