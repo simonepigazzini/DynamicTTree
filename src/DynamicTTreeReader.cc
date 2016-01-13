@@ -1,7 +1,7 @@
 class DYNAMIC_TREE_NAME
 {
 public:
-    virtual ~DYNAMIC_TREE_NAME() {};
+    ~DYNAMIC_TREE_NAME() {};
 #define DATA(t, name) argument_type<void(t)>::type name;
     DATA_TABLE                                                          
 #undef DATA
@@ -37,3 +37,4 @@ DATA_CLASS_TABLE
 private:
     TTree* tree_;
 };
+
