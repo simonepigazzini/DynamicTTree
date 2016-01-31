@@ -1,3 +1,13 @@
+#ifndef DATA_TABLE
+#define DATA_TABLE
+#endif
+#ifndef DATA_VECT_TABLE
+#define DATA_VECT_TABLE
+#endif
+#ifndef DATA_CLASS_TABLE
+#define DATA_CLASS_TABLE
+#endif
+
 class DYNAMIC_TREE_NAME: public DynamicTTreeBase
 {
 public:
@@ -11,10 +21,10 @@ public:
     DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name) argument_type<void(t)>::type* name;
+#define DATA(t, name, ...) argument_type<void(t __VA_ARGS__)>::type* name;
     DATA_CLASS_TABLE                                                          
 #undef DATA    
-
+    
     //---ctors---
     //---costructor for a new TTree
     DYNAMIC_TREE_NAME(const char* name="", const char* title=""):
@@ -40,9 +50,36 @@ DATA_TABLE
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name)                        \
-    name=new argument_type<void(t)>::type(); \
+#define DATA(t, name, ...)                       \
+    name=new argument_type<void(t __VA_ARGS__)>::type(); \
     tree_->Branch(#name, &name);
+DATA_CLASS_TABLE                                                          
+#undef DATA
+    
+    }
+
+    //---costructor for already existing TChain
+    DYNAMIC_TREE_NAME(TChain* t):
+        DynamicTTreeBase()
+        {
+            //---save TTree ptr
+            tree_ = t;
+
+            //---set branches
+            //---basic types
+#define DATA(t, name) name=0; tree_->SetBranchAddress(#name, &name);
+DATA_TABLE                                                          
+#undef DATA
+
+    //---get first entry in case c-arrays range depends on one of the previous variables
+    tree_->GetEntry(0);
+
+    //---c array
+#define DATA(t, name, size) name=new argument_type<void(t)>::type[size]; tree_->SetBranchAddress(#name, name);
+DATA_VECT_TABLE                                                          
+#undef DATA
+    //---c++ classes
+#define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name);
 DATA_CLASS_TABLE                                                          
 #undef DATA
     
@@ -69,12 +106,12 @@ DATA_TABLE
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name) name=new argument_type<void(t)>::type(); tree_->SetBranchAddress(#name, &name);
+#define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name);
 DATA_CLASS_TABLE                                                          
 #undef DATA
     
     }
-
+    
     //---dtor---
     ~DYNAMIC_TREE_NAME() {};
 };
