@@ -9,15 +9,19 @@ incdir = /usr/include/root/
 ROOT_LIB := `root-config --libs --glibs`
 ROOT_FLAGS := `root-config --cflags --ldflags`
 
-all: bin/DT_SimpleExample lib/LinkDef.cxx lib/DynamicTTreeDict.so
+all: bin/DT_SimpleExample lib/LinkDef.cxx lib/DynamicTTreeDict.so lib/libDTT.so
 
 lib/%.o: src/%.cc interface/%.h interface/DynamicTTreeInterface.h
 	@echo " CXX $<"
 	@$ $(CXX) $(CXXFLAGS) -c -o $@ $< $(INCLUDE) $(ROOT_LIB) $(ROOT_FLAGS)
 
-lib/LinkDef.cxx: interface/DynamicTTreeBase.h interface/LinkDef.h
+lib/%.so: lib/DynamicTTreeBase.o
 	@echo " CXX $<"
+	$(CXX) -shared -o $@ $<
+
+lib/LinkDef.cxx: test/DT_SimpleExample.cpp
 	@$ rootcling -f $@ -c $^
+	rootcling -f $@ -c $^
 
 lib/DynamicTTreeDict.so: lib/LinkDef.cxx lib/DynamicTTreeBase.o
 	@echo " CXX $<"
