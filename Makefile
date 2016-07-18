@@ -3,6 +3,8 @@ CXXFLAGS = -std=c++11 -fPIC
 SOFLAGS = -shared -O3
 INCLUDE = -I"./"
 LIB = -L"./lib/"
+libdir = /usr/lib/root/
+incdir = /usr/include/root/
 
 ROOT_LIB := `root-config --libs --glibs`
 ROOT_FLAGS := `root-config --cflags --ldflags`
@@ -10,17 +12,26 @@ ROOT_FLAGS := `root-config --cflags --ldflags`
 all: bin/DT_SimpleExample lib/LinkDef.cxx lib/DynamicTTreeDict.so
 
 lib/%.o: src/%.cc interface/%.h interface/DynamicTTreeInterface.h
-	$(CXX) $(CXXFLAGS) -c -o $@ $< $(INCLUDE) $(ROOT_LIB) $(ROOT_FLAGS)
+	@echo " CXX $<"
+	@$ $(CXX) $(CXXFLAGS) -c -o $@ $< $(INCLUDE) $(ROOT_LIB) $(ROOT_FLAGS)
 
-lib/LinkDef.cxx: test/DT_SimpleExample.cpp
-	rootcling -f $@ -c $^
+lib/LinkDef.cxx: interface/DynamicTTreeBase.h interface/LinkDef.h
+	@echo " CXX $<"
+	@$ rootcling -f $@ -c $^
 
-lib/DynamicTTreeDict.so: lib/LinkDef.cxx 
-	$(CXX) $(CXXFLAGS) $(SOFLAGS) -o $@ $^ $(INCLUDE) $(ROOT_LIB) $(ROOT_FLAGS) $(LIB)
+lib/DynamicTTreeDict.so: lib/LinkDef.cxx lib/DynamicTTreeBase.o
+	@echo " CXX $<"
+	@$ $(CXX) $(CXXFLAGS) $(SOFLAGS) -o $@ $^ $(INCLUDE) $(ROOT_LIB) $(ROOT_FLAGS) $(LIB)
 
 bin/%: test/%.cpp lib/DynamicTTreeBase.o
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(INCLUDE) $(ROOT_LIB) $(ROOT_FLAGS) 
+	@echo " CXX $<"
+	@$ $(CXX) $(CXXFLAGS) -o $@ $^ $(INCLUDE) $(ROOT_LIB) $(ROOT_FLAGS) 
 
 clean:
 	rm -fr bin/*
 	rm -fr lib/*
+
+install:
+	cp lib/DynamicTTreeDict.so $(libdir)
+	cp interface/DynamicTTreeInterface.h $(incdir)
+	cp interface/DynamicTTreeBase.h $(incdir)
