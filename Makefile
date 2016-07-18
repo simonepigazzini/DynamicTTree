@@ -17,11 +17,11 @@ lib/%.o: src/%.cc interface/%.h interface/DynamicTTreeInterface.h
 
 lib/%.so: lib/DynamicTTreeBase.o
 	@echo " CXX $<"
-	$(CXX) -shared -o $@ $<		
+	@$ $(CXX) -shared -o $@ $<		
 
 lib/LinkDef.cxx: test/DT_SimpleExample.cpp
 	@$ rootcling -f $@ -c $^
-	rootcling -f $@ -c $^
+	@$ rootcling -f $@ -c $^
 
 lib/DynamicTTreeDict.so: lib/LinkDef.cxx lib/DynamicTTreeBase.o
 	@echo " CXX $<"
