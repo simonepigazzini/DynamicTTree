@@ -1,4 +1,4 @@
-#include "interface/DynamicTTreeBase.h"
+#include "ExternalTools/DynamicTTree/interface/DynamicTTreeBase.h"
 
 std::map<std::type_index, const char*> DynamicTTreeBase::type_map={
     {typeid(bool), "/O"},

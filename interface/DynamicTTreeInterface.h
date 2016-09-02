@@ -115,3 +115,8 @@ DATA_CLASS_TABLE
     //---dtor---
     ~DYNAMIC_TREE_NAME() {};
 };
+
+#undef DATA_TABLE
+#undef DATA_VECT_TABLE
+#undef DATA_CLASS_TABLE
+#undef DYNAMIC_TREE_NAME
