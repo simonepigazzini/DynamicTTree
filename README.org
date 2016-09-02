@@ -9,10 +9,20 @@
   A set of methods is also defined in order to provide a simple way to handle iteration over all
   the TTree entries.
 
+** How to use the interface in CMSSW 
+
+   - building:
+   =cd $CMSSW_BASE/src=
+   =git clone git@github.com:simonepigazzini/DynamicTTree.git ExternalTools/DynamicTTree=
+   =scram b=
+
+   - using in other packages:
+     + Add the following line in the package BuildFile.xml: 
+       <use   name="ExternalTools/DynamicTTree"/>
 
 ** How to define a new interface:
    - Include the DTR header file:
-   =#include "interface/DynamicTTreeReader.h"=
+   =#include "ExternalTools/DynamicTTree/interface/DynamicTTreeBase.h"=
 
    - define the name of the interface class and the set of branches:
    =#define DYNAMIC_TREE_NAME DynamicTTreeReader=
@@ -26,7 +36,7 @@
 
    - include the precompiler macros to generate the class body and methods:
      *the following line must be placed below the branches definition*
-   =#include "src/DynamicTTreeReader.cc"=
+   =#include "ExternalTools/DynamicTTree/interface/DynamicTTreeInterface.h"=
 
    - test/DTR_SimpleExample.cpp contains a working example.
 
