@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -std=c++11 -fPIC
+CXXFLAGS = -std=c++11 -fPIC -D_GLIBCXX_USE_CXX11_ABI=0
 SOFLAGS = -shared -O3
 INCLUDE = -I"./"
 LIB = -L"./lib/"
