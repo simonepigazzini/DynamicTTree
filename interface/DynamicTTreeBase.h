@@ -20,6 +20,7 @@ public:
 
     //---getters---
     TTree* GetTTreePtr() { return tree_; };
+    long int GetCurrentEntry() { return currentEntry_; };
 
     //---utils---
     bool NextEntry(long int entry=-1);
