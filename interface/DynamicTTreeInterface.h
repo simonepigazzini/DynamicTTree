@@ -44,7 +44,7 @@ DATA_TABLE
 #undef DATA
     //---c arrays
 #define DATA(t, name, size)                                             \
-    name = new argument_type<void(t)>::type[size];                      \
+    name = new argument_type<void(t)>::type[size]();                    \
     leaf = std::string(#name)+"["+#size+"]"+type_map[typeid(argument_type<void(t)>::type)]; \
     tree_->Branch(#name, name, leaf.c_str());                                  
 DATA_VECT_TABLE                                                          
@@ -75,7 +75,7 @@ DATA_TABLE
     tree_->GetEntry(0);
 
     //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size]; tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
@@ -102,7 +102,7 @@ DATA_TABLE
     tree_->GetEntry(0);
 
     //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size]; tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
