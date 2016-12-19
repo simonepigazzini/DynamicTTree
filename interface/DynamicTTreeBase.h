@@ -2,6 +2,7 @@
 #define __DYNAMIC_TTREE_BASE__
 
 #include <typeindex>
+#include <iostream>
 
 #include "TFile.h"
 #include "TChain.h"

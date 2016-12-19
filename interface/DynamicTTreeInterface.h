@@ -45,7 +45,7 @@ public:
 #undef DATA
                 //---c arrays
 #define DATA(t, name, size)                                             \
-                name = new argument_type<void(t)>::type[size];          \
+                name = new argument_type<void(t)>::type[size]();        \
                 leaf = std::string(#name)+"["+#size+"]"+type_map[typeid(argument_type<void(t)>::type)]; \
                 tree_->Branch(#name, name, leaf.c_str());                                  
                 DATA_VECT_TABLE                                                          
@@ -76,7 +76,7 @@ public:
                 tree_->GetEntry(0);
 
             //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size]; tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
             DATA_VECT_TABLE                                                          
 #undef DATA
                 //---c++ classes
@@ -105,17 +105,17 @@ public:
                 tree_->GetEntry(0);
 
             //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size]; tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
             DATA_VECT_TABLE                                                          
 #undef DATA
-                //---c++ classes
+                        //---c++ classes
 #define DATA(t, name, ...)                                              \
-                name=new argument_type<void(t __VA_ARGS__ )>::type();   \
-                tree_->SetBranchAddress(#name, &name, &name ## _br);   
-                DATA_CLASS_TABLE                                                          
+                        name=new argument_type<void(t __VA_ARGS__ )>::type(); \
+                        tree_->SetBranchAddress(#name, &name, &name ## _br);   
+                        DATA_CLASS_TABLE                                                          
 #undef DATA
     
-                }
+                        }
     
     //---dtor---
     ~DYNAMIC_TREE_NAME() {};
@@ -130,9 +130,9 @@ public:
             DATA_TABLE                                                          
 #undef DATA
                 //---c array
-#define DATA(t, name, size)                                  \
-                if(name) delete[] name;                      \
-                name=new argument_type<void(t)>::type[size]; \
+#define DATA(t, name, size)                                     \
+                if(name) delete[] name;                         \
+                name=new argument_type<void(t)>::type[size];    \
                 tree_->SetBranchAddress(#name, name);
                 DATA_VECT_TABLE                                                          
 #undef DATA
