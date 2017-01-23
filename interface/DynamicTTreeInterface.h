@@ -1,3 +1,5 @@
+#ifdef DYNAMIC_TREE_NAME
+
 #ifndef DATA_TABLE
 #define DATA_TABLE
 #endif
@@ -115,3 +117,5 @@ DATA_CLASS_TABLE
     //---dtor---
     ~DYNAMIC_TREE_NAME() {};
 };
+
+#endif
