@@ -49,10 +49,10 @@ DATA_TABLE
     tree_->Branch(#name, name, leaf.c_str());                                  
 DATA_VECT_TABLE                                                          
 #undef DATA
-    //---c++ classes
+    //---c++ classes    
 #define DATA(t, name, ...)                       \
-    name=new argument_type<void(t __VA_ARGS__)>::type(); \
-    tree_->Branch(#name, &name);
+    name=new argument_type<void(t __VA_ARGS__)>::type();        \
+    tree_->Branch(#name, &name, 32000, 0);
 DATA_CLASS_TABLE                                                          
 #undef DATA
     
@@ -114,6 +114,27 @@ DATA_CLASS_TABLE
     
     //---dtor---
     ~DYNAMIC_TREE_NAME() {};
+
+    //---utils---
+    //---hard reset: reset all addresses, useful after a copy constructor call.
+    void Reset()
+        {
+            //---reset branches
+            //---basic types
+#define DATA(t, name) name=0; tree_->SetBranchAddress(#name, &name);
+            DATA_TABLE                                                          
+#undef DATA
+                //---c array
+#define DATA(t, name, size) name=new argument_type<void(t)>::type[size]; tree_->SetBranchAddress(#name, name);
+                DATA_VECT_TABLE                                                          
+#undef DATA
+                //---c++ classes                
+#define DATA(t, name, ...)  name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name);
+                DATA_CLASS_TABLE                                                          
+#undef DATA
+    
+                };
+
 };
 
 #undef DATA_TABLE
