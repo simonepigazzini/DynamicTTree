@@ -1,3 +1,4 @@
+#ifdef DYNAMIC_TREE_NAME
 #ifndef DATA_TABLE
 #define DATA_TABLE
 #endif
@@ -141,3 +142,5 @@ DATA_CLASS_TABLE
 #undef DATA_VECT_TABLE
 #undef DATA_CLASS_TABLE
 #undef DYNAMIC_TREE_NAME
+
+#endif
