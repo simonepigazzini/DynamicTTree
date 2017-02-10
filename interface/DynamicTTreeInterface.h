@@ -22,7 +22,7 @@ public:
     DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name, ...) argument_type<void(t __VA_ARGS__)>::type* name;
+#define DATA(t, name, var, ...) argument_type<void(t __VA_ARGS__ )>::type* var; TBranch* var_br = nullptr;
     DATA_CLASS_TABLE                                                          
 #undef DATA    
     
@@ -51,9 +51,9 @@ DATA_TABLE
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes    
-#define DATA(t, name, ...)                       \
-    name=new argument_type<void(t __VA_ARGS__)>::type();        \
-    tree_->Branch(#name, &name, 32000, 0);
+#define DATA(t, name, var, ...)                                 \
+    var=new argument_type<void(t __VA_ARGS__ )>::type();   \
+    tree_->Branch(#name, &var, 32000, 0);
 DATA_CLASS_TABLE                                                          
 #undef DATA
     
@@ -80,7 +80,9 @@ DATA_TABLE
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name);
+#define DATA(t, name, var, ...)                                        \
+    var=new argument_type<void(t __VA_ARGS__ )>::type(); \
+    tree_->SetBranchAddress(#name, &var, &var_br);   
 DATA_CLASS_TABLE                                                          
 #undef DATA
     
@@ -107,7 +109,9 @@ DATA_TABLE
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name);
+#define DATA(t, name, var, ...)                                        \
+    var=new argument_type<void(t __VA_ARGS__ )>::type(); \
+    tree_->SetBranchAddress(#name, &var, &var_br);   
 DATA_CLASS_TABLE                                                          
 #undef DATA
     
@@ -130,7 +134,9 @@ DATA_CLASS_TABLE
                 DATA_VECT_TABLE                                                          
 #undef DATA
                 //---c++ classes                
-#define DATA(t, name, ...)  name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name);
+#define DATA(t, name, var, ...)                                         \
+                var=new argument_type<void(t __VA_ARGS__ )>::type(); \
+                tree_->SetBranchAddress(#name, &var, &var_br);   
                 DATA_CLASS_TABLE                                                          
 #undef DATA
     
