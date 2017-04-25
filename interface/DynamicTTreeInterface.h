@@ -130,11 +130,15 @@ public:
             DATA_TABLE                                                          
 #undef DATA
                 //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size]; tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size)                                  \
+                if(name) delete[] name;                      \
+                name=new argument_type<void(t)>::type[size]; \
+                tree_->SetBranchAddress(#name, name);
                 DATA_VECT_TABLE                                                          
 #undef DATA
                 //---c++ classes                
 #define DATA(t, name, ...)                                              \
+                if(name) delete name;                                   \
                 name=new argument_type<void(t __VA_ARGS__ )>::type();   \
                 tree_->SetBranchAddress(#name, &name, &name ## _br);   
                 DATA_CLASS_TABLE                                                          
