@@ -2,7 +2,7 @@
 
 namespace
 {
-    struct dictionary
+    struct dictionary_dtt
     {
          DynamicTTreeBase dummy11;
     };
