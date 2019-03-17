@@ -12,21 +12,30 @@
 
 ** How to define a new interface:
    - Include the DTR header file:
-   =#include "interface/DynamicTTreeReader.h"=
+     #+BEGIN_SRC 
+     #include "interface/DynamicTTreeReader.h"
+     #+END_SRC
 
    - define the name of the interface class and the set of branches:
-   =#define DYNAMIC_TREE_NAME DynamicTTreeReader=
-   =#define DATA_TABLE                              \=
-   =DATA(int, i)                                    \=
-   =DATA(float, f)=
-   =#define DATA_VECT_TABLE                         \=
-   =DATA(int, vi, i)=
-   =#define DATA_CLASS_TABLE                        \=
-   =DATA(std::string, s)=
+     #+BEGIN_SRC 
+     #define DYNAMIC_TREE_NAME DynamicTTreeReader
+
+     #define DATA_TABLE                              \
+     DATA(int, i)                                    \
+     DATA(float, f)
+
+     #define DATA_VECT_TABLE                         \
+     DATA(int, vi, i)
+
+     #define DATA_CLASS_TABLE                        \
+     DATA(std::string, s)
+     #+END_SRC
 
    - include the precompiler macros to generate the class body and methods:
      *the following line must be placed below the branches definition*
-   =#include "src/DynamicTTreeReader.cc"=
+     #+BEGIN_SRC 
+     #include "src/DynamicTTreeReader.cc"
+     #+END_SRC
 
    - test/DTR_SimpleExample.cpp contains a working example.
 
