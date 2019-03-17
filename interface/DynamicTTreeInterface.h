@@ -23,7 +23,7 @@ public:
     DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name, ...) argument_type<void(t __VA_ARGS__)>::type* name;
+#define DATA(t, name, ...) argument_type<void(t __VA_ARGS__ )>::type* name; TBranch* name ## _br = nullptr;
     DATA_CLASS_TABLE                                                          
 #undef DATA    
     
@@ -81,7 +81,7 @@ DATA_TABLE
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name);
+#define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name, &name ## _br);
 DATA_CLASS_TABLE                                                          
 #undef DATA
     
@@ -108,7 +108,7 @@ DATA_TABLE
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
-#define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name);
+#define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name, &name ## _br);
 DATA_CLASS_TABLE                                                          
 #undef DATA
     
@@ -116,6 +116,33 @@ DATA_CLASS_TABLE
     
     //---dtor---
     ~DYNAMIC_TREE_NAME() {};
+
+    //---utils---
+    //---hard reset: reset all addresses, useful after a copy constructor call.
+    void Reset()
+        {
+            //---reset branches
+            //---basic types
+#define DATA(t, name) name=0; tree_->SetBranchAddress(#name, &name);
+            DATA_TABLE                                                          
+#undef DATA
+                //---c array
+#define DATA(t, name, size)                                     \
+                if(name) delete[] name;                         \
+                name=new argument_type<void(t)>::type[size];    \
+                tree_->SetBranchAddress(#name, name);
+                DATA_VECT_TABLE                                                          
+#undef DATA
+                //---c++ classes                
+#define DATA(t, name, ...)                                              \
+                if(name) delete name;                                   \
+                name=new argument_type<void(t __VA_ARGS__ )>::type();   \
+                tree_->SetBranchAddress(#name, &name, &name ## _br);   
+                DATA_CLASS_TABLE                                                          
+#undef DATA
+    
+                };
+    
 };
 
 #endif

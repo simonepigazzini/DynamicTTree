@@ -25,7 +25,8 @@ public:
 
     //---utils---
     bool NextEntry(long int entry=-1);
-
+    virtual void Reset() {};
+    
 protected:
     long int currentEntry_;
     TTree*   tree_;
