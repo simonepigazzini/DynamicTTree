@@ -6,9 +6,6 @@
 #ifndef DATA_VECT_TABLE
 #define DATA_VECT_TABLE
 #endif
-#ifndef DATA_MATRIX_TABLE
-#define DATA_MATRIX_TABLE
-#endif
 #ifndef DATA_CLASS_TABLE
 #define DATA_CLASS_TABLE
 #endif
@@ -22,12 +19,8 @@ public:
     DATA_TABLE                                                          
 #undef DATA
     //---c arrays
-#define DATA(t, name, size) argument_type<void(t)>::type* name;
+#define DATA(t, name, size, MAX_SIZE) argument_type<void(t)>::type* name;
     DATA_VECT_TABLE                                                          
-#undef DATA
-    //---c arrays
-#define DATA(t, name, sizex, sizey) argument_type<void(t)>::type* name;
-    DATA_MATRIX_TABLE                                                          
 #undef DATA
     //---c++ classes
 #define DATA(t, name, ...) argument_type<void(t __VA_ARGS__ )>::type* name; TBranch* name ## _br = nullptr;
@@ -46,32 +39,24 @@ public:
             //---basic types
             std::string leaf;
 #define DATA(t, name)                                                   \
-            name=0;                                                     \
+            name=0; \
             leaf = std::string(#name)+type_map[typeid(argument_type<void(t)>::type)]; \
             tree_->Branch(#name, &name, leaf.c_str()); 
-DATA_TABLE                                                          
+	    DATA_TABLE                                                          
 #undef DATA
     //---c arrays
-#define DATA(t, name, size)                                             \
-    name = new argument_type<void(t)>::type[size]();                    \
+#define DATA(t, name, size, MAX_SIZE)						\
+    name = new argument_type<void(t)>::type[MAX_SIZE]();                    \
     leaf = std::string(#name)+"["+#size+"]"+type_map[typeid(argument_type<void(t)>::type)]; \
-    tree_->Branch(#name, name, leaf.c_str());                                  
-DATA_VECT_TABLE                                                          
-#undef DATA
-    //---c matrix
-#define DATA(t, name, sizex, sizey)						\
-    name = new argument_type<void(t)>::type[sizex][sizey]();                    \
-    leaf = std::string(#name)+"["+#sizex+"]"+"["+#sizey+"]"+type_map[typeid(argument_type<void(t)>::type)]; \
-    tree_->Branch(#name, name, leaf.c_str());                                  
-DATA_MATRIX_TABLE                                                          
+    tree_->Branch(#name, name, leaf.c_str());
+  DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
 #define DATA(t, name, ...)                       \
     name=new argument_type<void(t __VA_ARGS__)>::type(); \
     tree_->Branch(#name, &name);
-DATA_CLASS_TABLE                                                          
+  DATA_CLASS_TABLE                                                          
 #undef DATA
-    
     }
 
     //---costructor for already existing TChain
@@ -91,12 +76,8 @@ DATA_TABLE
     tree_->GetEntry(0);
 
     //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size, MAX_SIZE) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
 DATA_VECT_TABLE                                                          
-#undef DATA
-    //---c matrix
-#define DATA(t, name, sizex, sizey) name=new argument_type<void(t)>::type[sizex][sizey](); tree_->SetBranchAddress(#name, name);
-DATA_MATRIX_TABLE                                                          
 #undef DATA
     //---c++ classes
 #define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name, &name ## _br);
@@ -122,12 +103,8 @@ DATA_TABLE
     tree_->GetEntry(0);
 
     //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size, MAX_SIZE) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
 DATA_VECT_TABLE                                                          
-#undef DATA
-    //---c matrix
-#define DATA(t, name, sizex, sizey) name=new argument_type<void(t)>::type[sizex][sizey](); tree_->SetBranchAddress(#name, name);
-DATA_MATRIX_TABLE                                                          
 #undef DATA
     //---c++ classes
 #define DATA(t, name, ...) name=new argument_type<void(t __VA_ARGS__)>::type(); tree_->SetBranchAddress(#name, &name, &name ## _br);
@@ -149,18 +126,11 @@ DATA_CLASS_TABLE
             DATA_TABLE                                                          
 #undef DATA
                 //---c array
-#define DATA(t, name, size)                                     \
+#define DATA(t, name, size, MAX_SIZE)					\
                 if(name) delete[] name;                         \
                 name=new argument_type<void(t)>::type[size];    \
                 tree_->SetBranchAddress(#name, name);
                 DATA_VECT_TABLE                                                          
-#undef DATA
-                //---c matrix
-#define DATA(t, name, sizex, sizey)					\
-                if(name) delete[] name;                         \
-                name=new argument_type<void(t)>::type[sizex][sizey];    \
-                tree_->SetBranchAddress(#name, name);
-                DATA_MATRIX_TABLE                                                          
 #undef DATA
                 //---c++ classes                
 #define DATA(t, name, ...)                                              \

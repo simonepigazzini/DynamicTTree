@@ -9,11 +9,13 @@
 //---Define the TTree branches
 #define DYNAMIC_TREE_NAME DynamicTTree
 
+#define MAX_SIZE 100
+
 #define DATA_TABLE                              \
     DATA(int, i)                                \
     DATA(float, f)
 #define DATA_VECT_TABLE                         \
-    DATA(int, vi, i)
+  DATA(int, vi, i, MAX_SIZE)
 #define DATA_CLASS_TABLE                                        \
     DATA(std::string, s)                                        \
     DATA(std::map, m, <std::string, std::pair<float, int> >)
