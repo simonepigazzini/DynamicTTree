@@ -63,6 +63,7 @@ public:
     DYNAMIC_TREE_NAME(TChain* t):
         DynamicTTreeBase()
         {
+	  std::cout << "HHG" << std::endl;
             //---save TTree ptr
             tree_ = t;
 
@@ -90,9 +91,9 @@ DATA_CLASS_TABLE
     DYNAMIC_TREE_NAME(TTree* t):
         DynamicTTreeBase()
         {
+
             //---save TTree ptr
             tree_ = t;
-
             //---set branches
             //---basic types
 #define DATA(t, name) name=0; tree_->SetBranchAddress(#name, &name);
@@ -100,7 +101,9 @@ DATA_TABLE
 #undef DATA
 
     //---get first entry in case c-arrays range depends on one of the previous variables
-    tree_->GetEntry(0);
+  tree_->GetEntry(0);
+
+
 
     //---c array
 #define DATA(t, name, size, MAX_SIZE) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);

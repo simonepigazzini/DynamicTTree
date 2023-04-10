@@ -10,7 +10,8 @@ std::map<std::type_index, const char*> DynamicTTreeBase::type_map={
     {typeid(float), "/F"},
     {typeid(double), "/D"},
     {typeid(long int), "/L"},
-    {typeid(unsigned long int), "/l"}
+    {typeid(unsigned long int), "/l"},
+    {typeid(unsigned long long), "/l"}
 };
             
 bool DynamicTTreeBase::NextEntry(long int entry)
