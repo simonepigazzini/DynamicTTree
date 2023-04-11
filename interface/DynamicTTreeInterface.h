@@ -19,7 +19,7 @@ public:
     DATA_TABLE                                                          
 #undef DATA
     //---c arrays
-#define DATA(t, name, size) argument_type<void(t)>::type* name;
+#define DATA(t, name, size, MAX_SIZE) argument_type<void(t)>::type* name;
     DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
@@ -39,31 +39,31 @@ public:
             //---basic types
             std::string leaf;
 #define DATA(t, name)                                                   \
-            name=0;                                                     \
+            name=0; \
             leaf = std::string(#name)+type_map[typeid(argument_type<void(t)>::type)]; \
             tree_->Branch(#name, &name, leaf.c_str()); 
-DATA_TABLE                                                          
+	    DATA_TABLE                                                          
 #undef DATA
     //---c arrays
-#define DATA(t, name, size)                                             \
-    name = new argument_type<void(t)>::type[size]();                    \
+#define DATA(t, name, size, MAX_SIZE)						\
+    name = new argument_type<void(t)>::type[MAX_SIZE]();                    \
     leaf = std::string(#name)+"["+#size+"]"+type_map[typeid(argument_type<void(t)>::type)]; \
-    tree_->Branch(#name, name, leaf.c_str());                                  
-DATA_VECT_TABLE                                                          
+    tree_->Branch(#name, name, leaf.c_str());
+  DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
 #define DATA(t, name, ...)                       \
     name=new argument_type<void(t __VA_ARGS__)>::type(); \
     tree_->Branch(#name, &name);
-DATA_CLASS_TABLE                                                          
+  DATA_CLASS_TABLE                                                          
 #undef DATA
-    
     }
 
     //---costructor for already existing TChain
     DYNAMIC_TREE_NAME(TChain* t):
         DynamicTTreeBase()
         {
+	  std::cout << "HHG" << std::endl;
             //---save TTree ptr
             tree_ = t;
 
@@ -77,7 +77,7 @@ DATA_TABLE
     tree_->GetEntry(0);
 
     //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size, MAX_SIZE) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
@@ -91,9 +91,9 @@ DATA_CLASS_TABLE
     DYNAMIC_TREE_NAME(TTree* t):
         DynamicTTreeBase()
         {
+
             //---save TTree ptr
             tree_ = t;
-
             //---set branches
             //---basic types
 #define DATA(t, name) name=0; tree_->SetBranchAddress(#name, &name);
@@ -101,10 +101,12 @@ DATA_TABLE
 #undef DATA
 
     //---get first entry in case c-arrays range depends on one of the previous variables
-    tree_->GetEntry(0);
+  tree_->GetEntry(0);
+
+
 
     //---c array
-#define DATA(t, name, size) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
+#define DATA(t, name, size, MAX_SIZE) name=new argument_type<void(t)>::type[size](); tree_->SetBranchAddress(#name, name);
 DATA_VECT_TABLE                                                          
 #undef DATA
     //---c++ classes
@@ -127,7 +129,7 @@ DATA_CLASS_TABLE
             DATA_TABLE                                                          
 #undef DATA
                 //---c array
-#define DATA(t, name, size)                                     \
+#define DATA(t, name, size, MAX_SIZE)					\
                 if(name) delete[] name;                         \
                 name=new argument_type<void(t)>::type[size];    \
                 tree_->SetBranchAddress(#name, name);
